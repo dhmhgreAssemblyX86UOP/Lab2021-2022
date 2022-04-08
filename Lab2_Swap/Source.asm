@@ -7,6 +7,14 @@ INCLUDE Irvine32.inc
 ;		        $->
 ;ARRAY_LENGTH = $ - array =2 -0= 2
 
+;array1 BYTE 10,20,30,40
+;$
+;
+;
+;
+
+
+
 ;H e l l o W o r l d !  !  !  0    ODD
 ;0 1 2 3 4 5 6 7 8 9 10 11 12 13
 ;            ^
