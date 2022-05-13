@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StackFrameCreation1", "Stac
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProceduresFindAverage", "ProceduresFindAverage\ProceduresFindAverage.vcxproj", "{E3059767-7820-4EA1-BD35-A9BCF099F617}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ForLoopImplementation1", "ForLoopImplementation1\ForLoopImplementation1.vcxproj", "{824BD88E-CCE8-4131-A9D0-85EE81EE0425}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -91,6 +93,14 @@ Global
 		{E3059767-7820-4EA1-BD35-A9BCF099F617}.Release|x64.Build.0 = Release|x64
 		{E3059767-7820-4EA1-BD35-A9BCF099F617}.Release|x86.ActiveCfg = Release|Win32
 		{E3059767-7820-4EA1-BD35-A9BCF099F617}.Release|x86.Build.0 = Release|Win32
+		{824BD88E-CCE8-4131-A9D0-85EE81EE0425}.Debug|x64.ActiveCfg = Debug|x64
+		{824BD88E-CCE8-4131-A9D0-85EE81EE0425}.Debug|x64.Build.0 = Debug|x64
+		{824BD88E-CCE8-4131-A9D0-85EE81EE0425}.Debug|x86.ActiveCfg = Debug|Win32
+		{824BD88E-CCE8-4131-A9D0-85EE81EE0425}.Debug|x86.Build.0 = Debug|Win32
+		{824BD88E-CCE8-4131-A9D0-85EE81EE0425}.Release|x64.ActiveCfg = Release|x64
+		{824BD88E-CCE8-4131-A9D0-85EE81EE0425}.Release|x64.Build.0 = Release|x64
+		{824BD88E-CCE8-4131-A9D0-85EE81EE0425}.Release|x86.ActiveCfg = Release|Win32
+		{824BD88E-CCE8-4131-A9D0-85EE81EE0425}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
