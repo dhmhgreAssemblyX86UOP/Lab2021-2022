@@ -191,6 +191,51 @@ partition ENDP
 ;        quickSort(arr, pi + 1, high);
 ;    }
 ;}
+quicksort PROC
+;prologue
+push ebp
+mov ebp,esp
+pushad
+
+;body
+
+	mov eax,[ebp+12]
+	cmp eax,[ebp+16]
+	jge FALSEBODY
+TRUEBODY:
+
+	push [ebp+16]
+	push [ebp+12]
+	push [ebp+8]
+	call partition
+	; eax has the result of partition
+
+	mov ebx,eax
+	dec ebx
+	push ebx
+	push [ebp+12]
+	push [ebp+8]
+	call quicksort
+
+	push [ebp+16]
+	mov ebx,eax
+	inc ebx
+	push ebx
+	push [ebp+8]
+	call quicksort
+
+
+	
+FALSEBODY:
+;epilogue
+popad
+mov esp,ebp
+pop ebp
+ret 12
+quicksort ENDP
+
+
+
 ; 
 ;/* Function to print an array */
 ;void printArray(int arr[], int size)
