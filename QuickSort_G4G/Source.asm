@@ -6,8 +6,8 @@ Include Irvine32.inc
 
 
 .data
-array dword 1,2
-
+array dword 10, 7, 8, 9, 1, 5
+ARRAYSIZEM1 = ($-array)/TYPE array -1
 
 .code
 
@@ -106,7 +106,7 @@ mov edx,eax ; edx works as the i variable
 ;1:Initialization
 mov esi,[ebp+12] ; Initialize esi with low
 jmp COND
-LOOP:
+LOOP1:
    ;2: body
 ;   // If current element is smaller than the pivot
 ;        if (arr[j] < pivot (ecx))
@@ -141,7 +141,7 @@ COND:
    mov eax, [ebp+16] ; move high to eax
    dec eax ; eax has high -1
    cmp esi,eax
-   jle LOOP
+   jle LOOP1
 
    ;    swap(&arr[i + 1], &arr[high]);
    mov ecx,[ebp+16]
@@ -261,9 +261,10 @@ quicksort ENDP
 main PROC
 
 
-push OFFSET array +4
-push OFFSET array 
-call swap 
+push ARRAYSIZEM1
+push 0
+push OFFSET array
+call quicksort
 
 exit
 main ENDP
