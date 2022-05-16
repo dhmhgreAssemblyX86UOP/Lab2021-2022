@@ -54,8 +54,11 @@ swap ENDP
 ;of pivot */
 ;int partition (int arr[], int low, int high)
 ;{
-;    int pivot = arr[high]; // pivot
-;    int i = (low - 1); // Index of smaller element and indicates the right position of pivot found so far
+; arr : EBP+8
+; low : EBP+12
+; high : EBP+16
+;    int pivot = arr[high]; // pivot EBP-4
+;    int i = (low - 1); // EBP-8 Index of smaller element and indicates the right position of pivot found so far
 ; 
 ;    for (int j = low; j <= high - 1; j++)
 ;    {
@@ -69,6 +72,106 @@ swap ENDP
 ;    swap(&arr[i + 1], &arr[high]);
 ;    return (i + 1);
 ;}
+partition PROC
+;prologue
+push ebp
+mov ebp,esp
+sub esp,8
+push ebx
+push ecx
+push edx
+push esi
+push edi
+
+;body
+
+;int pivot = arr[high]; // pivot
+mov esi, [EBP+8] ;esi points to the arr[]
+mov ebx, [EBP+16] ; ebx has high
+mov eax, [esi+ebx*4] ; eax has arr[high]
+
+mov edi, [EBP-4] ; edi has the address of pivot
+mov [edi],eax ; transfer arr[high] to pivot
+mov ecx, eax ; ecx has pivot
+
+;int i = (low - 1);
+mov eax,[ebp+12] ;  eax has low
+dec eax ; eax has low - 1
+
+mov edi, [EBP-8] ; edi has the address of i
+mov [edi],eax ; transfer low-1 to i
+mov edx,eax ; edx works as the i variable
+
+; We select esi as the loop iterator
+;1:Initialization
+mov esi,[ebp+12] ; Initialize esi with low
+jmp COND
+LOOP:
+   ;2: body
+;   // If current element is smaller than the pivot
+;        if (arr[j] < pivot (ecx))
+;        {
+;            i++; // increment index of smaller element
+;            swap(&arr[i], &arr[j]);
+;       }
+	
+	mov edi, [EBP+8] ;edi points to the arr[]
+	mov eax, [edi+esi*4] ; eax has arr[j]
+;if condition	
+	cmp eax,ecx
+	jge STEP
+;if true path
+	inc edx
+
+
+	lea ebx,[edi+esi*4]
+	push ebx
+	lea ebx,[edi+edx*4]
+	push ebx
+	call swap
+
+;if false path
+
+STEP:
+   ;3: step
+   inc esi ; increase loop iterator esi
+
+COND:
+   ; 4: condition
+   mov eax, [ebp+16] ; move high to eax
+   dec eax ; eax has high -1
+   cmp esi,eax
+   jle LOOP
+
+   ;    swap(&arr[i + 1], &arr[high]);
+   mov ecx,[ebp+16]
+   lea ebx, [edi+ecx*4]
+   push ebx
+   lea ebx , [edi+esi*4]
+   push ebx
+   call swap
+
+   ;    return (i + 1);
+   mov eax,esi
+
+;epilogue
+pop edi
+pop esi
+pop edx
+pop ecx
+pop ebx
+mov esp,ebp
+pop ebp
+ret 12
+partition ENDP
+
+
+
+
+
+
+ 
+
 ; 
 ;/* The main function that implements QuickSort
 ;arr[] --> Array to be sorted,
