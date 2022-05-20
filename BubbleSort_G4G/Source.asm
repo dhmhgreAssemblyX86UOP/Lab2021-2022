@@ -2,10 +2,11 @@ TITLE BubbleSort From Geeks 4 Geeks ( Calling Convention : CDECL )
 INCLUDE Irvine32.inc
 
 .data
-;    char arr[] = { 64, 34, 25, 12, 22, 11, 90 };
-array BYTE 64h, 34h, 25h, 12h, 22h, 11h, 90h
+;    char arr[] = { 64, 34, 25, 12, 22, 11, 70 };
+array BYTE 64h, 34h, 25h, 12h, 22h, 11h, 70h
 ;    int n = sizeof(arr) / sizeof(arr[0]);
 ARRAYSIZE = ($-array)/TYPE array
+test1 BYTE 10 DUP(0)
 message BYTE "Sorted array:",0
 message1 BYTE "Initial array:",0
 keno BYTE " ",0
@@ -158,8 +159,9 @@ mov esi,[ebp+8] ; esi = &array esi has the base address of array
 jmp COND
 LOOP1:
  ;loop body
- mov eax,[esi+ecx*4]    ; arr[i] -> eax (indirect addressing)
- call WriteInt
+ mov al,[esi+ecx]    ; arr[i] -> eax (indirect addressing)
+ movsx eax,al
+ call WriteHex
  mov edx, OFFSET keno
  call WriteString
  ;step i++
@@ -191,15 +193,16 @@ printarray ENDP
 ;}
 main PROC
 
-;    printf("Sorted array: \n");
+;    printf("Initial array: \n");
  mov edx, OFFSET message1
  call WriteString
- call Crlf ; prints a newline to screen
+
 
  push ARRAYSIZE
  push OFFSET array
  call printarray
  add esp,8 ; mandatory for CDECL calling convention (2 arguments X 4 bytes = 8 bytes )
+ call Crlf ; prints a newline to screen
 
 ;    bubbleSort(arr, n);
  push ARRAYSIZE
@@ -210,12 +213,13 @@ main PROC
  ;    printf("Sorted array: \n");
  mov edx, OFFSET message
  call WriteString
- call Crlf ; prints a newline to screen
+
 
  push ARRAYSIZE
  push OFFSET array
  call printarray
  add esp,8 ; mandatory for CDECL calling convention (2 arguments X 4 bytes = 8 bytes )
+ call Crlf ; prints a newline to screen
 
 
 
