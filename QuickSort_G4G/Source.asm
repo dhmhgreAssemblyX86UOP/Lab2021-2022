@@ -8,7 +8,9 @@ Include Irvine32.inc
 .data
 array dword 10, 7, 8, 9, 1, 5
 ARRAYSIZEM1 = ($-array)/TYPE array -1
-
+message BYTE "Sorted Array :",0
+message1 BYTE "Initial Array :",0
+keno BYTE " ",0 
 .code
 
 ;#include <bits/stdc++.h>
@@ -90,7 +92,7 @@ mov esi, [EBP+8] ;esi points to the arr[]
 mov ebx, [EBP+16] ; ebx has high
 mov eax, [esi+ebx*4] ; eax has arr[high]
 
-mov edi, [EBP-4] ; edi has the address of pivot
+lea edi, [EBP-4] ; edi has the address of pivot
 mov [edi],eax ; transfer arr[high] to pivot
 mov ecx, eax ; ecx has pivot
 
@@ -98,7 +100,7 @@ mov ecx, eax ; ecx has pivot
 mov eax,[ebp+12] ;  eax has low
 dec eax ; eax has low - 1
 
-mov edi, [EBP-8] ; edi has the address of i
+lea edi, [EBP-8] ; edi has the address of i
 mov [edi],eax ; transfer low-1 to i
 mov edx,eax ; edx works as the i variable
 
@@ -258,13 +260,73 @@ quicksort ENDP
 ;}
 
 
+;/* Function to print an array */
+;void printArray(int arr[], int size)
+;{
+;    int i;
+;    for (i = 0; i < size; i++)
+;        cout << arr[i] << " ";
+;    cout << endl;
+;}
+PrintArray PROC
+;prologue
+push ebp
+mov ebp,esp
+pushad
+
+;body
+
+
+
+; loop initialization
+mov ecx,0   ;i=0
+mov esi,[ebp+8] ; esi = &array esi has the base address of array
+jmp COND
+LOOP1:
+ ;loop body
+ mov eax,[esi+ecx*4]    ; arr[i] -> eax (indirect addressing)
+ call WriteInt
+ mov edx, OFFSET keno
+ call WriteString
+ ;step i++
+ inc ecx
+ ;condition
+COND:
+ cmp ecx, [ebp+12]  ; i<size
+ jl LOOP1
+
+
+
+;epilogue
+popad
+mov esp,ebp
+pop ebp
+ret 8
+PrintArray ENDP
+
 main PROC
+
+mov edx, OFFSET message1  
+call WriteString   ; Initial Array :
+push ARRAYSIZEM1
+push OFFSET array
+call PrintArray
+call CrLf
+
 
 
 push ARRAYSIZEM1
 push 0
 push OFFSET array
 call quicksort
+
+
+mov edx, OFFSET message  
+call WriteString   ; Sorted Array :
+push ARRAYSIZEM1
+push OFFSET array
+call PrintArray
+
 
 exit
 main ENDP
