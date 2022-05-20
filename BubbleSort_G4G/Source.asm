@@ -6,6 +6,10 @@ INCLUDE Irvine32.inc
 array BYTE 64h, 34h, 25h, 12h, 22h, 11h, 70h
 ;    int n = sizeof(arr) / sizeof(arr[0]);
 ARRAYSIZE = ($-array)/TYPE array
+;apparently bubblesort doesn't work properly and overwrites 
+; message variables's contents
+;test1 variable hides problem of overwritting message1 by
+;being in middle between array and message variable
 test1 BYTE 10 DUP(0)
 message BYTE "Sorted array:",0
 message1 BYTE "Initial array:",0
