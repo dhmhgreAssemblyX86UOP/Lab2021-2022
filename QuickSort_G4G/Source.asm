@@ -314,12 +314,10 @@ call PrintArray
 call CrLf
 
 
-
 push ARRAYSIZEM1
 push 0
 push OFFSET array
 call quicksort
-
 
 mov edx, OFFSET message  
 call WriteString   ; Sorted Array :
