@@ -1,9 +1,10 @@
 TITLE BubbleSort From Geeks 4 Geeks ( Calling Convention : CDECL )
+; https://www.geeksforgeeks.org/bubble-sort/#:~:text=Bubble%20Sort%20is%20the%20simplest,time%20complexity%20is%20quite%20high.
 INCLUDE Irvine32.inc
 
 .data
 ;    char arr[] = { 64, 34, 25, 12, 22, 11, 70 };
-array BYTE 64h, 34h, 25h, 12h, 22h, 11h, 70h
+array SBYTE 64h, 34h, -25h, 12h, 22h, 11h, 70h
 ;    int n = sizeof(arr) / sizeof(arr[0]);
 ARRAYSIZE = ($-array)/TYPE array
 ;apparently bubblesort doesn't work properly and overwrites 
@@ -31,10 +32,10 @@ pushad
 ;body
 mov esi,[ebp+8] ; esi has the address of a
 mov edi,[ebp+12] ; edi has the address of b
-mov eax,[esi] ; indirect addressing to transfer a to eax
-mov ebx,[edi] ; mov *b to *a
-mov [esi],ebx ; //
-mov [edi],eax   ; mov *a to *b
+mov al,[esi] ; indirect addressing to transfer a to eax
+mov bl,[edi] ; mov *b to *a
+mov [esi],bl ; //
+mov [edi],al   ; mov *a to *b
 
 ;epilogue
 popad
@@ -46,11 +47,34 @@ swap ENDP
 ;// A function to implement bubble sort
 ;void bubbleSort(int arr[], int n)
 ;{
-;   int i, j;
-;    for (i = 0; i < n - 1; i++)
-; 
+;   int i, j;                             range j         [0..5]   [0..4]   [0..3]   [0..2]  [0..1]    [0..0]
+;    for (i = 0; i < n - 1; i++)   // starting point i  0        1        2        3       4         5
+;    In each iteration the algorithm moves the maximum value to the 
+;    highest possible rightmost position
+;     i=0 moves 7 to the highest possible rightmost position
+;    {5, 7, 4, 2, 1}, ; =1
+;	 {5, 7, 4, 2, 1}, j =2
+;	 {5, 4, 7, 2, 1}, j = 3
+;	 {5, 4, 2, 7, 1}, j = 4
+;	 {5, 4, 2, 1, 7}, j = 5
+;     i=1 moves 5 to the highest possible rightmost position
+;    {4, 5, 2, 1, 7}, ; =1
+;	 {4, 2, 5, 1, 7}, j =2
+;	 {4, 2, 1, 5, 7}, j = 3
+;	 {4, 2, 1, 5, 7}, j = 4
+;     i=2 moves 4 to the highest possible rightmost position
+;    {2, 4, 1, 5, 7}, ; =1
+;	 {2, 1, 4, 5, 7}, j =2
+;	 {2, 1, 4, 5, 7}, j = 3
+;     i=3 moves 2 to the highest possible rightmost position
+;    {1, 2, 4, 5, 7}, ; =1
+;	 {1, 2, 4, 5, 7}, j =2
+;	 
+;    
+;   
+;                                  
 ;        // Last i elements are already in place
-;        for (j = 0; j < n - i - 1; j++)
+;        for (j = 0; j < n - i - 1; j++)  // range in the new interval
 ;            if (arr[j] > arr[j + 1])
 ;                swap(&arr[j], &arr[j + 1]);
 ;}
@@ -67,10 +91,28 @@ pushad
 ;loop initialization
 mov ecx,0 ; i=0;
 mov edx,[ebp+12] ; edx has the size of array
-dec edx			 ; edx has the size of array -1
+dec edx			 ; edx has the size of array -1 (i = 0; i < n - 1; i++)
 mov edi,[ebp+8] ; edi has the base address of input array
 jmp COND1
 LOOP1:
+;    i=0 moves 7 to the highest possible rightmost position
+;    {5, 7, 4, 2, 1}, ; =1
+;	 {5, 7, 4, 2, 1}, j =2
+;	 {5, 4, 7, 2, 1}, j = 3
+;	 {5, 4, 2, 7, 1}, j = 4
+;	 {5, 4, 2, 1, 7}, j = 5
+;     i=1 moves 5 to the highest possible rightmost position
+;    {4, 5, 2, 1, 7}, ; =1
+;	 {4, 2, 5, 1, 7}, j =2
+;	 {4, 2, 1, 5, 7}, j = 3
+;	 {4, 2, 1, 5, 7}, j = 4
+;     i=2 moves 4 to the highest possible rightmost position
+;    {2, 4, 1, 5, 7}, ; =1
+;	 {2, 1, 4, 5, 7}, j =2
+;	 {2, 1, 4, 5, 7}, j = 3
+;     i=3 moves 2 to the highest possible rightmost position
+;    {1, 2, 4, 5, 7}, ; =1
+;	 {1, 2, 4, 5, 7}, j =2
 ;body
 	;loop initialization
 	mov ebx,0 ; j=0
@@ -81,24 +123,24 @@ LOOP1:
 	;swap(&arr[j], &arr[j + 1]);
 	push ecx 
 	push edx
-	; free registers eax,esi,ecx,edx
+		; free registers eax,esi,ecx,edx
+; array BYTE 64h, 34h, 25h, 12h, 22h, 11h, 70h
+		mov eax,edi  ;OK
+		add eax,ebx ; eax has &arr[j] OK
 
-	mov eax,edi
-	add eax,ebx ; eax has &arr[j]
-
-	mov esi,eax
-	inc esi     ; eax has &arr[j+1]
-
-	;if (arr[j] > arr[j + 1])
-	mov ecx,[esi] ; ecx has arr[j + 1]
-	cmp [eax],ecx
-	jle EXIT1
-		;swap(&arr[j], &arr[j + 1]);
-		push esi
-		push eax
-		call swap
-		add esp,8
-	EXIT1:
+		mov esi,eax ; OK
+		inc esi     ; eax has &arr[j+1] OK
+;		     [eax]         ecx
+		;if (arr[j] > arr[j + 1])
+		mov cl, [esi] ; ecx has arr[j + 1]
+		cmp [eax],cl
+		jle EXIT1
+			;swap(&arr[j], &arr[j + 1]);
+			push esi
+			push eax
+			call swap
+			add esp,8
+		EXIT1:
 
 	pop edx
 	pop ecx		
@@ -111,13 +153,13 @@ LOOP1:
 	mov eax, edx ; eax has size of array -1
 	sub eax, ecx ; eax has the size of array -i-1;
 	cmp ebx,eax
-	jl LOOP2
+	jb LOOP2
 ;step
 inc ecx
 COND1:
 ;condition
 cmp ecx,edx
-jl  LOOP1
+jb  LOOP1
 
 
 
@@ -207,6 +249,17 @@ main PROC
  call printarray
  add esp,8 ; mandatory for CDECL calling convention (2 arguments X 4 bytes = 8 bytes )
  call Crlf ; prints a newline to screen
+
+ ;push OFFSET array+3
+ ;push OFFSET array
+ ;call swap
+ ;add esp,8
+ ;
+ ;push ARRAYSIZE
+ ;push OFFSET array
+ ;call printarray
+ ;add esp,8 ; mandatory for CDECL calling convention (2 arguments X 4 bytes = 8 bytes )
+ ;call Crlf ; prints a newline to screen
 
 ;    bubbleSort(arr, n);
  push ARRAYSIZE
