@@ -52,6 +52,7 @@ jb LOOP1
 cdq                     ;  0000000000000226 /A       EDX : EAX       EBX -> Integer overflow
 div ebx  ; ebx -> 4 byte    divident 8byte / divisor 4byte   quotient = 4byte     
 
+
 ; update eax with the result (mean )
 ; epilogue
 pop edi
